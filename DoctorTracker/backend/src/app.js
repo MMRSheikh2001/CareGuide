@@ -8,6 +8,8 @@ const { notFound, errorHandler } = require("./middleware/errorHandler");
 
 const authRoutes = require("./routes/auth.routes");
 
+const doctorRoutes = require("./routes/doctor.routes");
+
 const app = express();
 
 app.use(helmet());
@@ -18,6 +20,10 @@ app.use(morgan("dev"));
 
 
 app.use("/api/auth", authRoutes);
+app.use("/api/doctors", doctorRoutes);
+
+
+
 
 
 
