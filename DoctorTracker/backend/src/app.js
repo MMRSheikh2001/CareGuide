@@ -10,6 +10,8 @@ const authRoutes = require("./routes/auth.routes");
 
 const doctorRoutes = require("./routes/doctor.routes");
 
+const patientRoutes = require("./routes/patient.routes");
+
 const app = express();
 
 app.use(helmet());
@@ -21,6 +23,8 @@ app.use(morgan("dev"));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/doctors", doctorRoutes);
+
+app.use("/api/patients", patientRoutes);
 
 
 
