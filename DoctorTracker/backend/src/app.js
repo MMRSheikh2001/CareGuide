@@ -12,6 +12,8 @@ const doctorRoutes = require("./routes/doctor.routes");
 
 const patientRoutes = require("./routes/patient.routes");
 
+const dashboardRoutes = require("./routes/dashboard.routes");
+
 const app = express();
 
 app.use(helmet());
@@ -25,6 +27,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/doctors", doctorRoutes);
 
 app.use("/api/patients", patientRoutes);
+
+app.use("/api/dashboard", dashboardRoutes);
 
 
 
