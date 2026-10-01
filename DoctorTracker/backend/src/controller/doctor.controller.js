@@ -4,7 +4,7 @@ const Doctor = require("../models/doctor.model");
 const Patient = require("../models/patient.model");
 const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
-const escapeRegex = require("../utils/escapeRegex");
+const escapeRegex = require("../utils/queryHelpers");
 
 
 const createDoctor = asyncHandler(async (req, res) => {

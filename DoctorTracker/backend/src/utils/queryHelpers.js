@@ -25,4 +25,6 @@ const buildDateRange = (from, to) => {
     return range;
 };
 
-module.exports = { getPagination, buildMeta, buildDateRange };
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+module.exports = { getPagination, buildMeta, buildDateRange,escapeRegex };

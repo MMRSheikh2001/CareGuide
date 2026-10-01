@@ -2,7 +2,7 @@ const Patient = require("../models/patient.model");
 const Doctor = require("../models/doctor.model");
 const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
-const escapeRegex = require("../utils/escapeRegex");
+const escapeRegex = require("../utils/queryHelpers");
 const { getPagination, buildMeta, buildDateRange } = require("../utils/queryHelpers");
 
 const ensureDoctorExists = async (id) => {
