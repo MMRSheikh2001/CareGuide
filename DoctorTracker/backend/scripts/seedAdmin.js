@@ -4,7 +4,7 @@ const User = require("../src/models/user.model");
 
 const { ADMIN_NAME = "Admin", ADMIN_EMAIL, ADMIN_PASSWORD } = process.env;
 
-(async () => {
+async function main() {
     if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
         console.error("Set ADMIN_EMAIL and ADMIN_PASSWORD in .env first");
         process.exit(1);
@@ -15,7 +15,7 @@ const { ADMIN_NAME = "Admin", ADMIN_EMAIL, ADMIN_PASSWORD } = process.env;
     const email = ADMIN_EMAIL.toLowerCase().trim();
     const user = await User.findOne({ email });
     if (user) {
-        user.password = ADMIN_PASSWORD; // hashed by the pre-save hook
+        user.password = ADMIN_PASSWORD;
         await user.save();
         console.log("Admin password updated:", email);
     } else {
@@ -24,4 +24,6 @@ const { ADMIN_NAME = "Admin", ADMIN_EMAIL, ADMIN_PASSWORD } = process.env;
     }
 
     await mongoose.disconnect();
-})();
+}
+
+main();
