@@ -3,15 +3,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArrowLeft, Building2, Mail, Phone, Plus, Search, Trash2, UserX } from "lucide-react";
+import { ArrowLeft, Building2, Mail, Phone, Plus, Trash2, UserX } from "lucide-react";
 import Button from "@/components/ui/Button";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import Pagination from "@/components/ui/Pagination";
 import PatientFormModal from "@/components/patients/PatientFormModal";
-import useDebounce from "@/hooks/useDebounce";
+
 import { useDoctor } from "@/hooks/useDoctors";
 import { useAddPatient, useDoctorPatients, useRemoveDoctorPatient } from "@/hooks/usePatients";
 import { formatDate } from "@/lib/format";
+import SearchInput from "@/components/ui/SearchInput";
 
 const PAGE_SIZE = 8;
 
@@ -23,9 +24,9 @@ export default function DoctorDetailPage() {
     const [page, setPage] = useState(1);
     const [addOpen, setAddOpen] = useState(false);
     const [toDelete, setToDelete] = useState(null);
-    const debouncedSearch = useDebounce(search);
 
-    const patients = useDoctorPatients(id, { search: debouncedSearch, page, limit: PAGE_SIZE });
+
+    const patients = useDoctorPatients(id, { search, page, limit: PAGE_SIZE })
     const addPatient = useAddPatient(id);
     const removePatient = useRemoveDoctorPatient(id);
 
@@ -99,19 +100,16 @@ export default function DoctorDetailPage() {
                 <div className="flex flex-col gap-3 border-b border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between">
                     <h2 className="text-lg font-semibold">Patients</h2>
                     <div className="flex gap-3">
-                        <div className="relative flex-1 sm:w-64">
-                            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" />
-                            <input
-                                value={search}
-                                onChange={(e) => {
-                                    setSearch(e.target.value);
-                                    setPage(1);
-                                }}
-                                placeholder="Search patients"
-                                aria-label="Search patients"
-                                className="block w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm shadow-sm focus:border-brand-500 focus:outline-2 focus:outline-brand-500/30"
-                            />
-                        </div>
+                        <SearchInput
+                            id="patient-search"
+                            value={search}
+                            onChange={(v) => {
+                                setSearch(v);
+                                setPage(1);
+                            }}
+                            placeholder="Search patients"
+                            className="flex-1 sm:w-64"
+                        />
                         <Button onClick={() => setAddOpen(true)}>
                             <Plus className="size-4" /> <span className="hidden sm:inline">Add patient</span>
                         </Button>

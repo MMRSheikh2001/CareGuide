@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Pencil, Search, Trash2, UserX, X } from "lucide-react";
+import { Pencil, Trash2, UserX, X } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import Button from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
 import Pagination from "@/components/ui/Pagination";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import PatientFormModal from "@/components/patients/PatientFormModal";
-import useDebounce from "@/hooks/useDebounce";
+
 import { useDoctorOptions } from "@/hooks/useDoctors";
 import {
     useDeletePatient,
@@ -18,6 +18,7 @@ import {
     useUpdatePatient,
 } from "@/hooks/usePatients";
 import { formatDate } from "@/lib/format";
+import SearchInput from "@/components/ui/SearchInput";
 
 const PAGE_SIZE = 10;
 const emptyFilters = { search: "", condition: "", gender: "", doctor: "", from: "", to: "" };
@@ -27,9 +28,9 @@ export default function PatientsPage() {
     const [page, setPage] = useState(1);
     const [editing, setEditing] = useState(null);
     const [toDelete, setToDelete] = useState(null);
-    const debouncedSearch = useDebounce(filters.search);
 
-    const params = { ...filters, search: debouncedSearch, page, limit: PAGE_SIZE };
+
+    const params = { ...filters, page, limit: PAGE_SIZE };
     const { data, isPending, isFetching, error, refetch } = usePatients(params);
     const { data: options } = usePatientFilterOptions();
     const { data: doctors } = useDoctorOptions();
@@ -65,17 +66,16 @@ export default function PatientsPage() {
 
             {/* Filters */}
             <div className="mb-4 grid gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-6">
-                <div className="relative sm:col-span-2">
-                    <label htmlFor="search" className="mb-1.5 block text-xs font-medium text-slate-500">Search</label>
-                    <Search className="pointer-events-none absolute bottom-3 left-3 size-4 text-slate-400" />
-                    <input
-                        id="search"
-                        value={filters.search}
-                        onChange={update("search")}
-                        placeholder="Name, condition or phone"
-                        className={`${inputCls} pl-9`}
-                    />
-                </div>
+                <SearchInput
+                    label="Search"
+                    value={filters.search}
+                    onChange={(v) => {
+                        setFilters((f) => ({ ...f, search: v }));
+                        setPage(1);
+                    }}
+                    placeholder="Name, condition or phone"
+                    className="sm:col-span-2"
+                />
 
                 <Select label="Condition" id="condition" value={filters.condition} onChange={update("condition")}>
                     <option value="">All</option>

@@ -18,11 +18,8 @@ const doctorSchema = new mongoose.Schema(
 );
 
 
-doctorSchema.index({ name: "text", specialization: "text", hospital: "text" });
-
-doctorSchema.index({ specialization: 1, createdAt: -1 });
-doctorSchema.index({ hospital: 1, createdAt: -1 });
-
-doctorSchema.index({ createdAt: -1 });
+doctorSchema.index({ createdAt: -1, _id: -1 });
+doctorSchema.index({ specialization: 1, createdAt: -1, _id: -1 });
+doctorSchema.index({ hospital: 1, createdAt: -1, _id: -1 });
 
 module.exports = mongoose.model("Doctor", doctorSchema);

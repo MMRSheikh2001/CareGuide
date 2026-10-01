@@ -17,12 +17,8 @@ const patientSchema = new mongoose.Schema(
 );
 
 
-patientSchema.index({ name: "text", condition: "text" });
-
-patientSchema.index({ doctor: 1, createdAt: -1 });
-
-patientSchema.index({ condition: 1, createdAt: -1 });
-
-patientSchema.index({ createdAt: -1 });
+patientSchema.index({ createdAt: -1, _id: -1 });
+patientSchema.index({ doctor: 1, createdAt: -1, _id: -1 });
+patientSchema.index({ condition: 1, createdAt: -1, _id: -1 });
 
 module.exports = mongoose.model("Patient", patientSchema);

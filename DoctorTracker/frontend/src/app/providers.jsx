@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "sonner";
 
 export default function Providers({ children }) {
     // useState keeps one client for the life of the app (not recreated per render)
@@ -18,5 +19,10 @@ export default function Providers({ children }) {
             })
     );
 
-    return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+    return (
+        <QueryClientProvider client={client}>
+            {children}
+            <Toaster richColors closeButton position="top-right" />
+        </QueryClientProvider>
+    );
 }
