@@ -15,7 +15,7 @@ const dashboardRoutes = require("./routes/dashboard.routes");
 
 const app = express();
 
-// Ensure DB is connected before handling any incoming HTTP request
+
 app.use(async (req, res, next) => {
     try {
         await connectDB();
@@ -33,7 +33,7 @@ app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 
-// Health check endpoint
+
 app.get("/api/health", (req, res) => {
     res.json({ success: true, message: "API is running" });
 });

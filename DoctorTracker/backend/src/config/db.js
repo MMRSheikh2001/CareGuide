@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 let isConnected = false;
 
 const connectDB = async () => {
-    // If already connected, reuse existing connection
+  
     if (isConnected || mongoose.connection.readyState >= 1) {
         return;
     }

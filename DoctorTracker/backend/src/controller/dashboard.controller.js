@@ -5,11 +5,11 @@ const asyncHandler = require("../utils/asyncHandler");
 const TZ = process.env.APP_TIMEZONE || "Asia/Dhaka";
 const DAY = 24 * 60 * 60 * 1000;
 
-// "2026-09-30" in the app's timezone
+
 const dayKey = (date) =>
     new Intl.DateTimeFormat("en-CA", { timeZone: TZ }).format(date);
 
-// Daily counts for a model; $match on createdAt uses the createdAt index
+
 const dailyCounts = (Model, since) =>
     Model.aggregate([
         { $match: { createdAt: { $gte: since } } },
@@ -23,7 +23,7 @@ const dailyCounts = (Model, since) =>
         },
     ]);
 
-// Mongo skips empty days; charts need every day
+
 const fillDays = (rows, days) => {
     const map = new Map(rows.map((r) => [r._id, r.count]));
     const out = [];
@@ -40,7 +40,7 @@ const countBetween = (Model, from, to) => {
     return Model.countDocuments({ createdAt });
 };
 
-// % change vs previous period; null when there is nothing to compare to
+
 const pctChange = (current, previous) =>
     previous === 0 ? null : Math.round(((current - previous) / previous) * 100);
 
@@ -52,13 +52,13 @@ const AGE_LABELS = {
     66: "66+",
 };
 
-// GET /api/dashboard/stats?days=30
+
 const getStats = asyncHandler(async (req, res) => {
     const days = Math.min(Math.max(parseInt(req.query.days) || 30, 7), 90);
     const now = Date.now();
     const periodStart = new Date(now - days * DAY);
     const prevStart = new Date(now - 2 * days * DAY);
-    // One extra day back so the first chart day is complete
+    
     const seriesSince = new Date(now - (days + 1) * DAY);
 
     const [
@@ -152,7 +152,7 @@ const getStats = asyncHandler(async (req, res) => {
 
     const { byCondition, byGender, byAgeGroup } = distributions[0];
 
-    // $bucket omits empty buckets; charts want all of them
+   
     const ageCounts = new Map(byAgeGroup.map((b) => [b._id, b.count]));
     const patientsByAgeGroup = Object.entries(AGE_LABELS).map(([start, label]) => ({
         label,

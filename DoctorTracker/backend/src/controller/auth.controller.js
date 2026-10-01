@@ -9,7 +9,7 @@ const cookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 24 * 60 * 60 * 1000, // 1 day, keep in sync with JWT_EXPIRES_IN
+    maxAge: 24 * 60 * 60 * 1000, 
 };
 
 const signToken = (id) =>
@@ -17,7 +17,7 @@ const signToken = (id) =>
         expiresIn: process.env.JWT_EXPIRES_IN || "1d",
     });
 
-// POST /api/auth/login
+
 const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
@@ -35,13 +35,13 @@ const login = asyncHandler(async (req, res) => {
     });
 });
 
-// POST /api/auth/logout
+
 const logout = (req, res) => {
     res.clearCookie("token", { ...cookieOptions, maxAge: undefined });
     res.json({ success: true, message: "Logged out" });
 };
 
-// GET /api/auth/me
+
 const getMe = (req, res) => {
     const { _id, name, email, role } = req.user;
     res.json({ success: true, data: { id: _id, name, email, role } });

@@ -6,14 +6,14 @@ const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
 const escapeRegex = require("../utils/escapeRegex");
 
-// POST /api/doctors
+
 const createDoctor = asyncHandler(async (req, res) => {
     const { name, specialization, hospital, phone, email } = req.body;
     const doctor = await Doctor.create({ name, specialization, hospital, phone, email });
     res.status(201).json({ success: true, data: doctor });
 });
 
-// GET /api/doctors?search=&specialization=&hospital=&from=&to=&page=&limit=
+
 const getDoctors = asyncHandler(async (req, res) => {
     const page = Math.max(parseInt(req.query.page) || 1, 1);
     const limit = Math.min(Math.max(parseInt(req.query.limit) || 10, 1), 50);
@@ -47,7 +47,8 @@ const getDoctors = asyncHandler(async (req, res) => {
         Doctor.countDocuments(filter),
     ]);
 
-    // One grouped query for the whole page, not one query per doctor
+
+
     const counts = await Patient.aggregate([
         { $match: { doctor: { $in: doctors.map((d) => d._id) } } },
         { $group: { _id: "$doctor", count: { $sum: 1 } } },
@@ -66,7 +67,8 @@ const getDoctors = asyncHandler(async (req, res) => {
     });
 });
 
-// GET /api/doctors/filter-options
+
+
 const getFilterOptions = asyncHandler(async (req, res) => {
     const [specializations, hospitals] = await Promise.all([
         Doctor.distinct("specialization"),
@@ -78,7 +80,8 @@ const getFilterOptions = asyncHandler(async (req, res) => {
     });
 });
 
-// GET /api/doctors/:id
+
+
 const getDoctorById = asyncHandler(async (req, res) => {
     const doctor = await Doctor.findById(req.params.id).lean();
     if (!doctor) throw new ApiError(404, "Doctor not found");

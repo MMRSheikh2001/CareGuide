@@ -17,7 +17,7 @@ const {
 
 const router = express.Router();
 
-// Every doctor route requires a logged-in user
+
 router.use(protect);
 
 router.get(
@@ -32,7 +32,7 @@ router.get(
     getDoctors
 );
 
-// Must be declared before "/:id", or "filter-options" is treated as an id
+
 router.get("/filter-options", getFilterOptions);
 
 router.get(

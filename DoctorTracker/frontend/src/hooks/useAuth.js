@@ -29,7 +29,7 @@ export function useLogout() {
         mutationFn: () => api("/auth/logout", { method: "POST" }),
         onSettled: () => {
             queryClient.clear();
-            // Full navigation so the proxy re-checks the (now cleared) cookie
+           
             window.location.assign("/login");
         },
     });

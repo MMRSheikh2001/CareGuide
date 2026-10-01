@@ -8,7 +8,7 @@ const asyncHandler = require("../utils/asyncHandler");
 const protect = asyncHandler(async (req, res, next) => {
   let token = req.cookies?.token;
 
-  // Fallback for API tools like Postman
+
   const header = req.headers.authorization;
   if (!token && header?.startsWith("Bearer ")) {
     token = header.split(" ")[1];
@@ -30,7 +30,7 @@ const protect = asyncHandler(async (req, res, next) => {
   next();
 });
 
-// Authorization: restrict by role
+
 const authorize =
   (...roles) =>
   (req, res, next) => {

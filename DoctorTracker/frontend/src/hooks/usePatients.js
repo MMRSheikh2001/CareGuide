@@ -3,7 +3,7 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { toast } from "sonner";
-// Anything that changes patients also changes doctor counts and dashboard stats
+
 function useInvalidateAll() {
     const queryClient = useQueryClient();
     return () => {
@@ -13,7 +13,7 @@ function useInvalidateAll() {
     };
 }
 
-/* ---------- Patients page ---------- */
+
 
 export function usePatients(params) {
     return useQuery({
@@ -47,7 +47,7 @@ export function useDeletePatient() {
     });
 }
 
-/* ---------- Doctor detail page ---------- */
+
 
 export function useDoctorPatients(doctorId, params) {
     return useQuery({

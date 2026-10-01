@@ -10,7 +10,7 @@ const ensureDoctorExists = async (id) => {
     if (!exists) throw new ApiError(404, "Doctor not found");
 };
 
-// Builds the Mongo filter from query params, starting from a base filter
+
 const buildPatientFilter = (q, base = {}) => {
     const filter = { ...base };
 
@@ -42,9 +42,8 @@ const runPagedQuery = async (filter, query, populateDoctor) => {
     return { data, meta: buildMeta(total, page, limit) };
 };
 
-/* ---------- Nested under a doctor ---------- */
 
-// GET /api/doctors/:id/patients
+
 const getDoctorPatients = asyncHandler(async (req, res) => {
     await ensureDoctorExists(req.params.id);
     const filter = buildPatientFilter(req.query, { doctor: req.params.id });
@@ -52,7 +51,9 @@ const getDoctorPatients = asyncHandler(async (req, res) => {
     res.json({ success: true, ...result });
 });
 
-// POST /api/doctors/:id/patients
+
+
+
 const addPatientToDoctor = asyncHandler(async (req, res) => {
     await ensureDoctorExists(req.params.id);
     const { name, age, gender, phone, condition } = req.body;
@@ -63,31 +64,33 @@ const addPatientToDoctor = asyncHandler(async (req, res) => {
     res.status(201).json({ success: true, data: patient });
 });
 
-// DELETE /api/doctors/:doctorId/patients/:patientId
+
+
 const removePatientFromDoctor = asyncHandler(async (req, res) => {
     const { doctorId, patientId } = req.params;
-    // Matching both ids prevents deleting a patient through the wrong doctor
+
     const patient = await Patient.findOneAndDelete({ _id: patientId, doctor: doctorId });
     if (!patient) throw new ApiError(404, "Patient not found for this doctor");
     res.json({ success: true, message: "Patient deleted" });
 });
 
-/* ---------- Dedicated patients page ---------- */
 
-// GET /api/patients
+
+
+
 const getPatients = asyncHandler(async (req, res) => {
     const filter = buildPatientFilter(req.query);
     const result = await runPagedQuery(filter, req.query, true);
     res.json({ success: true, ...result });
 });
 
-// GET /api/patients/filter-options
+
 const getPatientFilterOptions = asyncHandler(async (req, res) => {
     const conditions = await Patient.distinct("condition");
     res.json({ success: true, data: { conditions: conditions.sort() } });
 });
 
-// GET /api/patients/:id
+
 const getPatientById = asyncHandler(async (req, res) => {
     const patient = await Patient.findById(req.params.id)
         .populate("doctor", "name specialization hospital")
@@ -96,9 +99,9 @@ const getPatientById = asyncHandler(async (req, res) => {
     res.json({ success: true, data: patient });
 });
 
-// PUT /api/patients/:id
+
 const updatePatient = asyncHandler(async (req, res) => {
-    // Whitelist fields so nothing unexpected can be written
+
     const allowed = ["name", "age", "gender", "phone", "condition", "doctor"];
     const updates = {};
     for (const key of allowed) {
@@ -116,7 +119,7 @@ const updatePatient = asyncHandler(async (req, res) => {
     res.json({ success: true, data: patient });
 });
 
-// DELETE /api/patients/:id
+
 const deletePatient = asyncHandler(async (req, res) => {
     const patient = await Patient.findByIdAndDelete(req.params.id);
     if (!patient) throw new ApiError(404, "Patient not found");

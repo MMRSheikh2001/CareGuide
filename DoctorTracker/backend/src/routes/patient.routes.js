@@ -22,7 +22,7 @@ const listQuery = [
     query("doctor").optional().isMongoId().withMessage("Invalid doctor id"),
 ];
 
-// On update every field is optional, but if present it must be valid
+
 const updateRules = [
     body("name").optional().trim().notEmpty().withMessage("Name cannot be empty"),
     body("age").optional().isInt({ min: 0, max: 150 }).withMessage("Age must be 0-150"),
