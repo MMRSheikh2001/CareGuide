@@ -1,17 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Search, SearchX, X } from "lucide-react";
+import { Plus, SearchX, X } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import Button from "@/components/ui/Button";
 import Select from "@/components/ui/Select";
 import Pagination from "@/components/ui/Pagination";
-import useDebounce from "@/hooks/useDebounce";
+
 import { useCreateDoctor, useDoctors, useDoctorFilterOptions } from "@/hooks/useDoctors";
 import { formatDate } from "@/lib/format";
 import Link from "next/link";
 
 import DoctorFormModal from "@/components/doctors/DoctorFormModal";
+import SearchInput from "@/components/ui/SearchInput";
 
 
 const PAGE_SIZE = 10;
@@ -20,9 +21,9 @@ const emptyFilters = { search: "", specialization: "", hospital: "", from: "", t
 export default function DoctorsPage() {
     const [filters, setFilters] = useState(emptyFilters);
     const [page, setPage] = useState(1);
-    const debouncedSearch = useDebounce(filters.search);
 
-    const params = { ...filters, search: debouncedSearch, page, limit: PAGE_SIZE };
+
+    const params = { ...filters, page, limit: PAGE_SIZE };
     const { data, isPending, isFetching, error, refetch } = useDoctors(params);
     const { data: options } = useDoctorFilterOptions();
     const [addOpen, setAddOpen] = useState(false);
@@ -56,19 +57,16 @@ export default function DoctorsPage() {
 
             {/* Filters */}
             <div className="mb-4 grid gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:grid-cols-2 lg:grid-cols-6">
-                <div className="relative sm:col-span-2">
-                    <label htmlFor="search" className="mb-1.5 block text-xs font-medium text-slate-500">
-                        Search
-                    </label>
-                    <Search className="pointer-events-none absolute bottom-3 left-3 size-4 text-slate-400" />
-                    <input
-                        id="search"
-                        value={filters.search}
-                        onChange={update("search")}
-                        placeholder="Name, specialization or hospital"
-                        className={`${inputCls} pl-9`}
-                    />
-                </div>
+                <SearchInput
+                    label="Search"
+                    value={filters.search}
+                    onChange={(v) => {
+                        setFilters((f) => ({ ...f, search: v }));
+                        setPage(1);
+                    }}
+                    placeholder="Name, specialization or hospital"
+                    className="sm:col-span-2"
+                />
 
                 <Select label="Specialization" id="spec" value={filters.specialization} onChange={update("specialization")}>
                     <option value="">All</option>

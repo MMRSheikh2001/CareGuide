@@ -3,6 +3,7 @@
 
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
+import { toast } from "sonner";
 
 
 export function useDoctors(params) {
@@ -36,6 +37,7 @@ export function useCreateDoctor() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["doctors"] });
             queryClient.invalidateQueries({ queryKey: ["dashboard"] });
+            toast.success("Doctor added");
         },
     });
 }

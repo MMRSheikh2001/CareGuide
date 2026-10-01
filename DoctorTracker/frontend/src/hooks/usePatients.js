@@ -2,7 +2,7 @@
 
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-
+import { toast } from "sonner";
 // Anything that changes patients also changes doctor counts and dashboard stats
 function useInvalidateAll() {
     const queryClient = useQueryClient();
@@ -35,7 +35,7 @@ export function useUpdatePatient(id) {
     const invalidateAll = useInvalidateAll();
     return useMutation({
         mutationFn: (body) => api(`/patients/${id}`, { method: "PUT", body }),
-        onSuccess: invalidateAll,
+        onSuccess: () => { invalidateAll(); toast.success("Patient updated"); },
     });
 }
 
@@ -43,7 +43,7 @@ export function useDeletePatient() {
     const invalidateAll = useInvalidateAll();
     return useMutation({
         mutationFn: (id) => api(`/patients/${id}`, { method: "DELETE" }),
-        onSuccess: invalidateAll,
+        onSuccess: () => { invalidateAll(); toast.success("Patient deleted"); },
     });
 }
 
@@ -61,7 +61,7 @@ export function useAddPatient(doctorId) {
     const invalidateAll = useInvalidateAll();
     return useMutation({
         mutationFn: (body) => api(`/doctors/${doctorId}/patients`, { method: "POST", body }),
-        onSuccess: invalidateAll,
+        onSuccess: () => { invalidateAll(); toast.success("Patient added"); },
     });
 }
 
@@ -70,6 +70,6 @@ export function useRemoveDoctorPatient(doctorId) {
     return useMutation({
         mutationFn: (patientId) =>
             api(`/doctors/${doctorId}/patients/${patientId}`, { method: "DELETE" }),
-        onSuccess: invalidateAll,
+        onSuccess: () => { invalidateAll(); toast.success("Patient deleted"); },
     });
 }
