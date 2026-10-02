@@ -4,9 +4,12 @@
 
 🚀 **Live Demo:** [https://doctortrackerfrontend-eight.vercel.app](https://doctortrackerfrontend-eight.vercel.app)
 
+
 ## Description
 
 DoctorTracker is a comprehensive healthcare management platform designed to streamline appointment scheduling, patient tracking, and medical record access for both healthcare providers and patients. By providing a secure, real-time interface, DoctorTracker bridges the gap between doctors and patients—reducing administrative overhead, optimizing appointment workflows, and ensuring seamless access to vital health information anywhere, anytime.
+Admin :  admin@example.com  
+password : admin@123
 
 ## System Architecture
 
